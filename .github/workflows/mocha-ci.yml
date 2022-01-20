@@ -1,0 +1,23 @@
+name: mocha-ci
+
+on:
+  push:
+    branches-ignore:
+      - "master"
+    paths:
+      - server/**
+
+jobs:
+  test-front:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        mongodb-version: ['4.4']
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+      - name: Start MongoDB
+        uses: supercharge/mongodb-github-action@1.7.0
+          mongodb-version: ${{ matrix.mongodb-version }}
+      - name: Goto client and run tests
+        run: cd client && npm i && npm test
